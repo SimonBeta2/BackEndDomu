@@ -1,7 +1,7 @@
 package com.example.demo.models;
 import java.time.LocalDateTime;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +23,8 @@ public class UsuarioModel {
     private String email;
     private String telefono;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @CreationTimestamp
+    @Column(name = "fecha_registro", updatable = false,nullable = false)
     private LocalDateTime fechaRegistro;  
 
     public int getId() {
@@ -62,8 +63,6 @@ public class UsuarioModel {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
+    
 
 }
