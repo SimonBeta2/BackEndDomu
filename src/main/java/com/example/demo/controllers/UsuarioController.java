@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.services.UsuarioService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuario")
@@ -27,30 +30,26 @@ public class UsuarioController{
         return usuarioService.obtenerUsuarios();
     }
 
-    @GetMapping( path = "/{id}")
-    public Optional<UsuarioModel> obtenerUsuarioPorId(@PathVariable("id")Integer id){
+    @GetMapping("/{id}")
+    public Optional<UsuarioModel> obtenerUsuarioPorId(@PathVariable Integer id){
         return this.usuarioService.obtenerPorId(id);
     }
     // Crear
     @PostMapping()
-    public UsuarioModel crearUsuario(@RequestBody UsuarioModel usuario){
+    public UsuarioModel crearUsuario(@Valid @RequestBody UsuarioModel usuario){
         return this.usuarioService.crearUsuario(usuario);
     }
 
     // Actualizar
     @PutMapping("/{id}")
-    public UsuarioModel actualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioModel usuario) {
+    public UsuarioModel actualizarUsuario(@PathVariable Integer id, @Valid @RequestBody UsuarioModel usuario) {
         return usuarioService.actualizarUsuario(id, usuario);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public String eliminarPorId(@PathVariable("id")Integer id){
-        boolean delOk = this.usuarioService.eliminarUsuario(id);
-        if(delOk){
-            return "Se eliminó con exito el usuario con id" + id;
-        }else{
-            return "No se pudo eliminar al usuario con id" + id;
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarPorId(@PathVariable Integer id){
+        usuarioService.eliminarUsuario(id);
+        return ResponseEntity.ok("Usuario eliminado correctamente");
     }
 
 }

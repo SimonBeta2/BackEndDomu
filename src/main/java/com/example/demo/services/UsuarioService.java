@@ -22,6 +22,9 @@ public class UsuarioService{
 }
 
     public UsuarioModel actualizarUsuario(Integer id, UsuarioModel datos) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("Usuario no encontrado");
+    }
         UsuarioModel usuario = usuarioRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -33,15 +36,16 @@ public class UsuarioService{
 }
 
     public Optional<UsuarioModel> obtenerPorId(Integer id){
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("Usuario no encontrado");
+    }
         return usuarioRepository.findById(id);
     }
 
-    public boolean eliminarUsuario(Integer id){
-        try {
-            usuarioRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void eliminarUsuario(Integer id){
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("Usuario no encontrado");
+    }
+        usuarioRepository.deleteById(id);
     }
 }
