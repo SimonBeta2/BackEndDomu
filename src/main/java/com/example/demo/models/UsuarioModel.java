@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
 @Entity
@@ -31,7 +30,7 @@ public class UsuarioModel {
     @Column(unique = true, nullable = false)
     private Integer id;
 
-    @NotEmpty
+    @NotBlank
     private String nombre;
 
     @NotBlank
