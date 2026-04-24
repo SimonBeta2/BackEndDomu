@@ -1,18 +1,20 @@
 package com.example.demo.config;
 
-import com.example.demo.models.UsuarioModel;
-import com.example.demo.seguridad.JwtTokenProvider;
-import com.example.demo.services.UsuarioService;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import com.example.demo.models.UsuarioModel;
+import com.example.demo.seguridad.JwtTokenProvider;
+import com.example.demo.services.UsuarioService;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -41,7 +43,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String googleId = oAuth2User.getAttribute("sub");
 
         // Find or create user
-        User user = userService.findOrCreateUser(email, name, googleId);
+        UsuarioModel user = usuarioService.findOrCreateUser(email, name, googleId);
 
         // Generate JWT token
         String token = tokenProvider.generateToken(user.getId(), user.getEmail());
@@ -50,9 +52,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = String.format("%s?token=%s&userId=%d&email=%s&name=%s&picture=%s",
                 redirectUri,
                 token,
-                usuarioModel.getId(),
-                urlEncode(usuarioModel.getEmail()),
-                urlEncode(usuarioModel.getName())
+                user.getId(),
+                urlEncode(user.getEmail()),
+                urlEncode(user.getNombre())
         );
 
         // Redirect back to frontend with token in URL

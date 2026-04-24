@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 import java.util.ArrayList;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,7 @@ public class UsuarioController{
     }
 
     @GetMapping("/{id}")
-    public Optional<UsuarioModel> obtenerUsuarioPorId(@PathVariable Integer id){
+    public UsuarioModel obtenerUsuarioPorId(@PathVariable Integer id){
         return this.usuarioService.obtenerPorId(id);
     }
     // Crear

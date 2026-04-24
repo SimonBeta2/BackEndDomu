@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.UsuarioRepository;
 
@@ -20,13 +20,7 @@ public class UsuarioService{
     public UsuarioModel crearUsuario(UsuarioModel usuario) {
         return usuarioRepository.save(usuario);
 }
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public UsuarioModel guardarUsuario(UsuarioModel usuario){
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        return usuarioRepository.save(usuario);
-}
+    
     public Optional<UsuarioModel> buscarPorEmail(String email){
         return usuarioRepository.findByEmail(email);
 }
@@ -44,12 +38,10 @@ public class UsuarioService{
         return usuarioRepository.save(usuario);
 }
 
-    public Optional<UsuarioModel> obtenerPorId(Integer id){
-        if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado");
-    }
-        return usuarioRepository.findById(id);
-    }
+    public UsuarioModel obtenerPorId(Integer id) {
+    return usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+}
 
     public void eliminarUsuario(Integer id){
         if (!usuarioRepository.existsById(id)) {
@@ -58,15 +50,14 @@ public class UsuarioService{
         usuarioRepository.deleteById(id);
     }
 
-    public User findOrCreateUser(String email, String name, String googleId) {
-        return userRepository.findByEmail(email)
+    public UsuarioModel findOrCreateUser(String email, String name, String googleId) {
+        return usuarioRepository.findByEmail(email)
                 .orElseGet(() -> {
-                    UsuarioModel newUser = new User();
+                    UsuarioModel newUser = new UsuarioModel();
                     newUser.setEmail(email);
-                    newUser.setName(name);
+                    newUser.setNombre(name);
                     newUser.setGoogleId(googleId);
-                    newUser.setPictureUrl(pictureUrl);
-                    return userRepository.save(newUser);
+                    return usuarioRepository.save(newUser);
                 });
     }
 }

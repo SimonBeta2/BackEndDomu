@@ -1,44 +1,67 @@
 package com.example.demo.controllers;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import com.example.demo.dtos.LoginRequest;
-import com.example.demo.dtos.LoginResponse;
+
+import com.example.demo.dtos.AuthResponseDTO;
+import com.example.demo.dtos.UsuarioDTO;
 import com.example.demo.models.UsuarioModel;
-import com.example.demo.seguridad.JwtService;
-import com.example.demo.services.AuthService;
+import com.example.demo.seguridad.JwtTokenProvider;
 import com.example.demo.services.UsuarioService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final JwtTokenProvider tokenProvider;
+    private final UsuarioService userService;
 
-    @Autowired
-    private JwtService jwtService;
+    public AuthController(JwtTokenProvider tokenProvider, UsuarioService userService) {
+        this.tokenProvider = tokenProvider;
+        this.userService = userService;
+    }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @GetMapping("/user")
+    public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
+        // Get JWT from Authorization header
+        String jwt = getJwtFromRequest(request);
 
-    @PostMapping("/login")
-    public Map<String, String> login(@RequestBody UsuarioModel usuario){
-
-        UsuarioModel user = usuarioService.buscarPorEmail(usuario.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        if(!passwordEncoder.matches(usuario.getPassword(), user.getPassword())){
-            throw new RuntimeException("Contraseña incorrecta");
+        if (!StringUtils.hasText(jwt)) {
+            return ResponseEntity.status(401).body("No token provided");
         }
 
-        String token = jwtService.generarToken(user.getEmail());
+        // Validate token
+        if (!tokenProvider.validateToken(jwt)) {
+            return ResponseEntity.status(401).body("Invalid or expired token");
+        }
 
-        return Map.of("token", token);
+        // Get user ID from token
+        Integer userId = tokenProvider.getUserIdFromToken(jwt);
+
+        // Fetch user from database
+        UsuarioModel user = userService.obtenerPorId(userId);
+
+        if (user == null) {
+            return ResponseEntity.status(401).body("User not found");
+        }
+
+        UsuarioDTO userDTO = new UsuarioDTO(user.getId(), user.getEmail(), user.getNombre(), user.getTelefono());
+        AuthResponseDTO response = new AuthResponseDTO(jwt, userDTO);
+
+        return ResponseEntity.ok(response);
+    }
+
+    private String getJwtFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }
