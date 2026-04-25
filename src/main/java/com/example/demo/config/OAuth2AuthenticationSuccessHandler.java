@@ -49,7 +49,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String token = tokenProvider.generateToken(user.getId(), user.getEmail());
 
         // Build redirect URL with token and user info as query parameters
-        String targetUrl = String.format("%s?token=%s&userId=%d&email=%s&name=%s&picture=%s",
+        String targetUrl = String.format("%s?token=%s&userId=%d&email=%s&name=%s",
                 redirectUri,
                 token,
                 user.getId(),
