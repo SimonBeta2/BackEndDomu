@@ -57,3 +57,5 @@ build/
 hs_err_pid*
 replay_pid*
 
+# Ocultar configuraciones locales de VS Code
+.vscode/
