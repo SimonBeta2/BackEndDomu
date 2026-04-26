@@ -41,4 +41,47 @@ public class OfertaModel {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "servicio_id", nullable = false)
     private ServiciosModel servicio;
+
+    public OfertaModel() {
+    }
+
+
+    public OfertaModel(String experiencia, String descripcion, String rangoPrecio, String disponibilidad) {
+        this.experiencia = experiencia;
+        this.descripcion = descripcion;
+        this.rangoPrecio = rangoPrecio;
+        this.disponibilidad = disponibilidad;
+    }
+
+    public String getExperiencia() {
+        return experiencia;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getRangoPrecio() {
+        return rangoPrecio;
+    }
+
+    public String getDisponibilidad() {
+        return disponibilidad;
+    }
+
+    public void setExperiencia(String experiencia) {
+        this.experiencia = experiencia;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setRangoPrecio(String rangoPrecio) {
+        this.rangoPrecio = rangoPrecio;
+    }
+
+    public void setDisponibilidad(String disponibilidad) {
+        this.disponibilidad = disponibilidad;
+    }
 }

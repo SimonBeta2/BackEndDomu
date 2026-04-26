@@ -42,7 +42,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 
                 // 1. TUS NUEVAS RUTAS PÚBLICAS (Añade esto)
-                .requestMatchers("/api/servicios/**", "/api/productos/**").permitAll() 
+                .requestMatchers("/api/servicios/**", "/api/productos/**", "/api/ofertas/**").permitAll()
                 
                 // 2. RUTAS DE AUTENTICACIÓN (Las que ya tenías)
                 .requestMatchers("/oauth2/**", "/login/**", "/api/auth/**").permitAll()
