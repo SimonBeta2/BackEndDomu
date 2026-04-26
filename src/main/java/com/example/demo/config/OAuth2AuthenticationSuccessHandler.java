@@ -41,9 +41,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
         String googleId = oAuth2User.getAttribute("sub");
+        String picture = oAuth2User.getAttribute("picture");
 
         // Find or create user
-        UsuarioModel user = usuarioService.findOrCreateUser(email, name, googleId);
+        UsuarioModel user = usuarioService.findOrCreateUser(email, name, googleId, picture);
 
         // Generate JWT token
         String token = tokenProvider.generateToken(user.getId(), user.getEmail());

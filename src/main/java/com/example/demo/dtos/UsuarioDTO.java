@@ -8,12 +8,15 @@ public class UsuarioDTO {
     private String email;
     private String nombre;
     private String telefono;
+    private String pictureUrl;
 
-    public UsuarioDTO(Integer id, String email, String nombre, String telefono) {
+    public UsuarioDTO(Integer id, String email, String nombre, String telefono, String pictureUrl) {
     this.id = id;
     this.email = email;
     this.nombre = nombre;
     this.telefono = telefono;
+    this.pictureUrl = pictureUrl;
+    
 }
 
     public Integer getId() {
@@ -46,5 +49,13 @@ public class UsuarioDTO {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 }

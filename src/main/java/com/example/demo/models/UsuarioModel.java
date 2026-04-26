@@ -1,15 +1,20 @@
 package com.example.demo.models;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
@@ -57,6 +62,15 @@ public class UsuarioModel {
     @Column(unique = true)
     private String googleId; 
 
+    private String pictureUrl;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DireccionModel> direcciones = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore // Ocultamos las ofertas al pedir el perfil para evitar bucles
+    private List<OfertaModel> ofertas = new ArrayList<>();
+
     public Integer getId() {
         return id;
     }
@@ -103,6 +117,22 @@ public class UsuarioModel {
 
     public void setGoogleId(String googleId) {
         this.googleId = googleId;
+    }
+
+    public List<DireccionModel> getDirecciones() {
+        return direcciones;
+    }
+
+    public void setDirecciones(List<DireccionModel> direcciones) {
+        this.direcciones = direcciones;
+    }
+
+    public String getPicture() {
+        return pictureUrl;
+    }
+
+    public void setPicture(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
 }
