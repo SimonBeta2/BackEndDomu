@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dtos.UsuarioDTO;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.services.UsuarioService;
 
@@ -43,7 +44,7 @@ public class UsuarioController{
 
     // Actualizar
     @PutMapping("/{id}")
-    public UsuarioModel actualizarUsuario(@PathVariable Integer id, @Valid @RequestBody UsuarioModel usuario) {
+    public UsuarioModel actualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioDTO usuario) {
         return usuarioService.actualizarUsuario(id, usuario);
     }
 

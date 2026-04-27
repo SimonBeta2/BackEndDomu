@@ -51,7 +51,7 @@ public class AuthController {
             return ResponseEntity.status(401).body("User not found");
         }
 
-        UsuarioDTO userDTO = new UsuarioDTO(user.getId(), user.getEmail(), user.getNombre(), user.getTelefono(), user.getPicture());
+        UsuarioDTO userDTO = new UsuarioDTO(user.getId(), user.getEmail(), user.getNombre(), user.getTelefono(), user.getPicture(), user.getDirecciones());
         AuthResponseDTO response = new AuthResponseDTO(jwt, userDTO);
 
         return ResponseEntity.ok(response);

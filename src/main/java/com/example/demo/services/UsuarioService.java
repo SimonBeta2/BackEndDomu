@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dtos.UsuarioDTO;
 import com.example.demo.models.DireccionModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.UsuarioRepository;
@@ -25,13 +26,13 @@ public class UsuarioService{
     public Optional<UsuarioModel> buscarPorEmail(String email){
         return usuarioRepository.findByEmail(email);
 }
-    public UsuarioModel actualizarUsuario(Integer id, UsuarioModel datos) {
+    public UsuarioModel actualizarUsuario(Integer id, UsuarioDTO datos) {
     // 1. Buscamos el usuario (hace 1 solo viaje a la base de datos)
     UsuarioModel usuario = usuarioRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
     // 2. Actualizamos los datos básicos
-    usuario.setNombre(datos.getNombre());
+    usuario.setNombre(datos.getName());
     usuario.setEmail(datos.getEmail());
     usuario.setTelefono(datos.getTelefono());
 

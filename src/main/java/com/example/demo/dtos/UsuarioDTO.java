@@ -1,22 +1,27 @@
 package com.example.demo.dtos;
 
+import java.util.List;
+
+import com.example.demo.models.DireccionModel;
+
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class UsuarioDTO {
     private Integer id;
     private String email;
-    private String nombre;
+    private String name;
     private String telefono;
     private String pictureUrl;
-
-    public UsuarioDTO(Integer id, String email, String nombre, String telefono, String pictureUrl) {
+    private List<DireccionModel> direcciones;
+    
+    public UsuarioDTO(Integer id, String email, String name, String telefono, String pictureUrl, List<DireccionModel> direcciones) {
     this.id = id;
     this.email = email;
-    this.nombre = nombre;
+    this.name = name;
     this.telefono = telefono;
     this.pictureUrl = pictureUrl;
-    
+    this.direcciones = direcciones;
 }
 
     public Integer getId() {
@@ -35,12 +40,12 @@ public class UsuarioDTO {
         this.email = email;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTelefono() {
@@ -57,5 +62,13 @@ public class UsuarioDTO {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public List<DireccionModel> getDirecciones() {
+        return direcciones;
+    }
+
+    public void setDirecciones(List<DireccionModel> direcciones) {
+        this.direcciones = direcciones;
     }
 }
