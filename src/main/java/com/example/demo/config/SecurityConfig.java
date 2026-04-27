@@ -45,6 +45,8 @@ public class SecurityConfig {
 
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+                .requestMatchers(HttpMethod.PUT, "/usuario/**").permitAll()
+
                 // 1. TUS NUEVAS RUTAS PÚBLICAS (Añade esto)
                 .requestMatchers("/api/servicios/**", "/api/productos/**", "/api/ofertas/**").permitAll()
                 
@@ -65,14 +67,26 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Split comma-separated origins from environment variable
+    
+    // Convertimos el String de orígenes a una lista limpia
         configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+    
+    // En lugar de "*", vamos a ser específicos con los métodos
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+    
+    // IMPORTANTE: Permitir estas cabeceras específicamente
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
+    
+    // Permitir que el cliente lea estas cabeceras
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+    
         configuration.setAllowCredentials(true);
+    
+    // Cache de la respuesta preflight (1 hora) para evitar tantas peticiones OPTIONS
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
+}
 }
