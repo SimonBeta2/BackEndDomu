@@ -39,7 +39,7 @@ public class UsuarioService{
     // 3. Actualizamos las direcciones (si es que el Frontend las envió)
     if (datos.getAddress() != null) {
         // Limpiamos la lista actual (esto activa el orphanRemoval para borrar las viejas)
-        usuario.getDirecciones().clear();
+        usuario.getDirecciones().clear();   
         
         // Recorremos las direcciones que vienen en el JSON
         for (DireccionModel dir : datos.getAddress()) {

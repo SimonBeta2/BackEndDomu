@@ -3,9 +3,12 @@ package com.example.demo.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,5 +39,27 @@ public class OfertaController {
     @PostMapping
     public OfertaModel crear(@RequestBody OfertaModel oferta) {
         return ofertaService.guardarOferta(oferta);
+    }
+
+    // --- 2. ACTUALIZAR OFERTA (PUT /ofertas/{id}) ---
+    @PutMapping("/{id}")
+    public ResponseEntity<OfertaModel> actualizarOferta(@PathVariable Integer id, @RequestBody OfertaModel oferta) {
+        try {
+            OfertaModel ofertaActualizada = ofertaService.actualizarOferta(id, oferta);
+            return ResponseEntity.ok(ofertaActualizada);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build(); // Devuelve un error 404 si no encuentra la oferta
+        }
+    }
+
+    // --- 3. ELIMINAR OFERTA (DELETE /ofertas/{id}) ---
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarOferta(@PathVariable Integer id) {
+        try {
+            ofertaService.eliminarOferta(id);
+            return ResponseEntity.noContent().build(); // Devuelve un 204 No Content indicando éxito al borrar
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
