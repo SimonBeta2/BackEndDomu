@@ -80,7 +80,6 @@ public class SecurityConfig {
                 .requestMatchers("/oauth2/**", "/login/**", "/api/auth/**").permitAll()
                 
                 // Todo lo demás privado
-                .requestMatchers("/api/solicitudes/**").authenticated()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
