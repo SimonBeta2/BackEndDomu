@@ -81,6 +81,7 @@ public class SecurityConfig {
                 
                 // Todo lo demás privado
                 .anyRequest().authenticated()
+                .requestMatchers("/api/solicitudes/**").authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
                 .successHandler(successHandler)
