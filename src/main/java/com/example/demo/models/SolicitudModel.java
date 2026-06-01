@@ -2,6 +2,10 @@ package com.example.demo.models;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +36,8 @@ public class SolicitudModel {
     // Detalles adicionales que el cliente escribe (ej: "Se rompió un tubo en el baño")
     @Column(nullable = false, length = 500)
     private String descripcionProblema;
-
+    @CreationTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaSolicitud;
 
 
