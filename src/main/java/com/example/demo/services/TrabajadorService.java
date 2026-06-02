@@ -13,14 +13,15 @@ public class TrabajadorService {
     @Autowired
     private TrabajadorRepository trabajadorRepository;
 
-    public void registrarTrabajadorSiNoExiste(UsuarioModel usuario) {
-        if (usuario == null) return;
+    public TrabajadorModel registrarTrabajadorSiNoExiste(UsuarioModel usuario) {
+    if (usuario == null) return null;
 
-        // Si este usuario no está en la tabla trabajador, lo registramos
-        if (trabajadorRepository.findByUsuario(usuario).isEmpty()) {
+    // Buscamos si ya existe
+    return trabajadorRepository.findByUsuario(usuario)
+        .orElseGet(() -> {
+            // Si no existe, lo crea, lo guarda y lo retorna
             TrabajadorModel nuevoTrabajador = new TrabajadorModel(usuario);
-            trabajadorRepository.save(nuevoTrabajador);
-            System.out.println("🎉 Usuario ID " + usuario.getId() + " registrado en la tabla trabajador.");
-        }
-    }
+            return trabajadorRepository.save(nuevoTrabajador);
+        });
+}
 }

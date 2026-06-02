@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.models.OfertaModel;
+import com.example.demo.models.OfertaTrabajadorModel;
 import com.example.demo.models.ServiciosModel;
+import com.example.demo.models.TrabajadorModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.OfertaRepository;
+import com.example.demo.repositories.OfertaTrabajadorRepository;
 import com.example.demo.repositories.ServiciosRepository;
 import com.example.demo.repositories.UsuarioRepository;
 
@@ -28,6 +31,9 @@ public class OfertaService {
     @Autowired
     private TrabajadorService trabajadorService;
 
+    @Autowired
+    private OfertaTrabajadorRepository ofertaTrabajadorRepository;
+
     public OfertaModel guardarOferta(OfertaModel oferta) {
         // 1. Buscamos el usuario real en la base de datos usando el ID que llegó
         UsuarioModel usuarioReal = usuarioRepository.findById(oferta.getUsuario().getId())
@@ -40,9 +46,15 @@ public class OfertaService {
         // 3. Reemplazamos los objetos "vacíos" que llegaron del JSON por los objetos reales y completos
         oferta.setUsuario(usuarioReal);
         oferta.setServicio(servicioReal);
-        
+        OfertaModel ofertaGuardada = ofertaRepository.save(oferta);
         try {
-        trabajadorService.registrarTrabajadorSiNoExiste(usuarioReal);
+        TrabajadorModel trabajadorReal = trabajadorService.registrarTrabajadorSiNoExiste(usuarioReal);
+        if (trabajadorReal != null) {
+            // Creamos la nueva fila de la tabla intermedia uniendo ambos registros
+            OfertaTrabajadorModel relacion = new OfertaTrabajadorModel(trabajadorReal, ofertaGuardada);
+            ofertaTrabajadorRepository.save(relacion);
+            System.out.println("🔗 Fila intermedia creada en oferta_trabajador con éxito.");
+        }
     } catch (Exception e) {
         // Al usar un try-catch, si llega a haber un detalle menor con esta tabla de adorno,
         // la oferta SE GUARDARÁ IGUAL sin romper el flujo principal de tu app.
