@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.models.SolicitudModel;
 
 @Repository
-public interface SolicitudRepository extends JpaRepository<SolicitudModel, Long> {
+public interface SolicitudRepository extends JpaRepository<SolicitudModel, Integer> {
     
     // Para la pestaña "Solicitudes": Ver lo que YO como cliente he pedido
     List<SolicitudModel> findByClienteId(Integer clienteId);

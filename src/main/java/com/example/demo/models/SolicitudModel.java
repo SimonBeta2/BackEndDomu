@@ -41,7 +41,7 @@ public class SolicitudModel {
     private LocalDateTime fechaSolicitud;
 
     @Column(name = "direccion_id", nullable = true)
-    private Integer direccion;
+    private String direccion;
 
     // 2. Fecha preferida (Guarda YYYY-MM-DD)
     @Column(nullable = false)
@@ -67,8 +67,8 @@ public class SolicitudModel {
     public LocalDateTime getFechaSolicitud() { return fechaSolicitud; }
     public void setFechaSolicitud(LocalDateTime fechaSolicitud) { this.fechaSolicitud = fechaSolicitud; }
 
-    public Integer getDireccion() { return direccion; }
-    public void setDireccion(Integer direccion) { this.direccion = direccion; }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
     public java.time.LocalDate getFechaPreferida() { return fechaPreferida; }
     public void setFechaPreferida(java.time.LocalDate fechaPreferida) { this.fechaPreferida = fechaPreferida; }
