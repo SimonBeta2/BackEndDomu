@@ -41,8 +41,8 @@ public class SolicitudModel {
     private LocalDateTime fechaSolicitud;
 
     @ManyToOne
-    @JoinColumn(name = "direccion_id", nullable = false)
-    private DireccionModel direccion; // Ajusta 'DireccionModel' al nombre exacto de tu entidad de direcciones
+    @JoinColumn(name = "direccion_id", referencedColumnName = "id", nullable = false)
+    private DireccionModel direccion;
 
     // 2. Fecha preferida (Guarda YYYY-MM-DD)
     @Column(nullable = false)
