@@ -11,9 +11,9 @@ import com.example.demo.models.SolicitudModel;
 public interface SolicitudRepository extends JpaRepository<SolicitudModel, Long> {
     
     // Para la pestaña "Solicitudes": Ver lo que YO como cliente he pedido
-    List<SolicitudModel> findByClienteId(Long clienteId);
+    List<SolicitudModel> findByClienteId(Integer clienteId);
 
     // Para la pestaña "Recibidas": Ver las solicitudes que le han llegado a MIS ofertas
     // Spring Boot entra a 'oferta', luego a 'usuario' y filtra por su ID automáticamente
-    List<SolicitudModel> findByOfertaUsuarioId(Long trabajadorId);
+    List<SolicitudModel> findByOfertaUsuarioId(Integer trabajadorId);
 }

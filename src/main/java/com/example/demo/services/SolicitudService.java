@@ -40,11 +40,11 @@ public class SolicitudService {
     return solicitudRepository.save(solicitud);
 }
 
-    public List<SolicitudModel> obtenerPorCliente(Long clienteId) {
+    public List<SolicitudModel> obtenerPorCliente(Integer clienteId) {
         return solicitudRepository.findByClienteId(clienteId);
     }
 
-    public List<SolicitudModel> obtenerPorTrabajador(Long trabajadorId) {
+    public List<SolicitudModel> obtenerPorTrabajador(Integer trabajadorId) {
         return solicitudRepository.findByOfertaUsuarioId(trabajadorId);
     }
 

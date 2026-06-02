@@ -21,7 +21,7 @@ public class SolicitudModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     // El cliente que está contratando/solicitando el servicio
     @ManyToOne
@@ -52,8 +52,8 @@ public class SolicitudModel {
     private java.time.LocalTime horaPreferida;
 
     // --- GETTERS Y SETTERS ---
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
     public UsuarioModel getCliente() { return cliente; }
     public void setCliente(UsuarioModel cliente) { this.cliente = cliente; }
