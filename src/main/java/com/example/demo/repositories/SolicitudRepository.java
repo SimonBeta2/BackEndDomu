@@ -1,6 +1,7 @@
 package com.example.demo.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,10 @@ public interface SolicitudRepository extends JpaRepository<SolicitudModel, Integ
     // Para la pestaña "Recibidas": Ver las solicitudes que le han llegado a MIS ofertas
     // Spring Boot entra a 'oferta', luego a 'usuario' y filtra por su ID automáticamente
     List<SolicitudModel> findByOfertaUsuarioId(Integer trabajadorId);
+
+    Optional<SolicitudModel> findByClienteIdAndOfertaIdAndEstadoIdIn(
+        Integer clienteId, 
+        Integer ofertaId, 
+        List<Integer> estadosActivosIds
+    );
 }

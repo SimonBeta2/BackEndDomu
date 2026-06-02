@@ -30,6 +30,26 @@ public class SolicitudService {
     private SolicitudUsuarioRepository solicitudUsuarioRepository;
 
     public SolicitudModel registrarSolicitud(SolicitudModel solicitud) {
+
+    // 🚨 1. VALIDACIÓN DE SEGURIDAD: ¿El cliente ya tiene este servicio contratado y ACTIVO?
+    if (solicitud.getCliente() != null && solicitud.getOferta() != null) {
+        
+        // Definimos la lista de IDs de estados que se consideran "Activos" y bloquean un nuevo intento.
+        // Ej: Supongamos que 1=PENDIENTE, 2=APROBADO, 3=EN_CURSO 4=FINALIZADO 5=CANCELADO (ajústalos según los guardes en tu BD)
+        List<Integer> estadosQueBloquean = List.of(1, 2, 3); 
+
+        boolean yaTieneSolicitudActiva = solicitudRepository.findByClienteIdAndOfertaIdAndEstadoIdIn(
+            solicitud.getCliente().getId(),
+            solicitud.getOferta().getId(),
+            estadosQueBloquean
+        ).isPresent();
+
+        if (yaTieneSolicitudActiva) {
+            throw new RuntimeException("Ya tienes una solicitud activa para este servicio. Debes esperar a que finalice o sea cancelada.");
+        }
+    }
+
+
     // Buscamos al cliente y la oferta como ya lo hacías con tus repositorios estables
     UsuarioModel clienteReal = usuarioRepository.findById(solicitud.getCliente().getId())
         .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));

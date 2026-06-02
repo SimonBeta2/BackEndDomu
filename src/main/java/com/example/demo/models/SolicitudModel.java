@@ -51,6 +51,10 @@ public class SolicitudModel {
     @Column(name = "hora_preferida", nullable = false)
     private java.time.LocalTime horaPreferida;
 
+    @ManyToOne
+    @JoinColumn(name = "estado_id", referencedColumnName = "id")
+    private EstadoModel estado;
+
     // --- GETTERS Y SETTERS ---
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -75,5 +79,8 @@ public class SolicitudModel {
 
     public java.time.LocalTime getHoraPreferida() { return horaPreferida; }
     public void setHoraPreferida(java.time.LocalTime horaPreferida) { this.horaPreferida = horaPreferida; }
+
+    public EstadoModel getEstado() { return estado; }
+    public void setEstado(EstadoModel estado) { this.estado = estado; }
 
 }
