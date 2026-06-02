@@ -35,6 +35,17 @@ public class OfertaService {
     private OfertaTrabajadorRepository ofertaTrabajadorRepository;
 
     public OfertaModel guardarOferta(OfertaModel oferta) {
+        // 🚨 VALIDACIÓN DE SEGURIDAD: ¿Ya existe este servicio para este usuario?
+        if (oferta.getUsuario() != null && oferta.getServicio() != null) {
+            boolean yaExiste = ofertaRepository
+            .findByUsuarioIdAndServicioId(oferta.getUsuario().getId(), oferta.getServicio().getId())
+            .isPresent();
+            
+        if (yaExiste) {
+            // Frenamos el proceso lanzando un error descriptivo
+            throw new RuntimeException("Ya tienes una oferta activa para este servicio. ¡No puedes duplicarla!");
+        }
+    }
         // 1. Buscamos el usuario real en la base de datos usando el ID que llegó
         UsuarioModel usuarioReal = usuarioRepository.findById(oferta.getUsuario().getId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
