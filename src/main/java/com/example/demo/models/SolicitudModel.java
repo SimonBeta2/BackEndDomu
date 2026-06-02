@@ -40,6 +40,17 @@ public class SolicitudModel {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaSolicitud;
 
+    @ManyToOne
+    @JoinColumn(name = "direccion_id", nullable = false)
+    private DireccionModel direccion; // Ajusta 'DireccionModel' al nombre exacto de tu entidad de direcciones
+
+    // 2. Fecha preferida (Guarda YYYY-MM-DD)
+    @Column(nullable = false)
+    private java.time.LocalDate fechaPreferida;
+
+    // 3. Hora preferida (Guarda HH:mm:ss)
+    @Column(nullable = false)
+    private java.time.LocalTime horaPreferida;
 
     // --- GETTERS Y SETTERS ---
     public Long getId() { return id; }
@@ -56,5 +67,14 @@ public class SolicitudModel {
 
     public LocalDateTime getFechaSolicitud() { return fechaSolicitud; }
     public void setFechaSolicitud(LocalDateTime fechaSolicitud) { this.fechaSolicitud = fechaSolicitud; }
+
+    public DireccionModel getDireccion() { return direccion; }
+    public void setDireccion(DireccionModel direccion) { this.direccion = direccion; }
+
+    public java.time.LocalDate getFechaPreferida() { return fechaPreferida; }
+    public void setFechaPreferida(java.time.LocalDate fechaPreferida) { this.fechaPreferida = fechaPreferida; }
+
+    public java.time.LocalTime getHoraPreferida() { return horaPreferida; }
+    public void setHoraPreferida(java.time.LocalTime horaPreferida) { this.horaPreferida = horaPreferida; }
 
 }
