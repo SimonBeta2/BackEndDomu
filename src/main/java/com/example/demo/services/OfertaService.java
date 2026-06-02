@@ -25,6 +25,9 @@ public class OfertaService {
     @Autowired
     private ServiciosRepository serviciosRepository;
 
+    @Autowired
+    private TrabajadorService trabajadorService;
+
     public OfertaModel guardarOferta(OfertaModel oferta) {
         // 1. Buscamos el usuario real en la base de datos usando el ID que llegó
         UsuarioModel usuarioReal = usuarioRepository.findById(oferta.getUsuario().getId())
@@ -37,6 +40,14 @@ public class OfertaService {
         // 3. Reemplazamos los objetos "vacíos" que llegaron del JSON por los objetos reales y completos
         oferta.setUsuario(usuarioReal);
         oferta.setServicio(servicioReal);
+        
+        try {
+        trabajadorService.registrarTrabajadorSiNoExiste(usuarioReal);
+    } catch (Exception e) {
+        // Al usar un try-catch, si llega a haber un detalle menor con esta tabla de adorno,
+        // la oferta SE GUARDARÁ IGUAL sin romper el flujo principal de tu app.
+        System.out.println("⚠️ Registro de trabajador omitido o duplicado de forma segura: " + e.getMessage());
+    }
 
         // 4. Guardamos y retornamos. ¡Ahora el JSON de salida estará completo!
         return ofertaRepository.save(oferta);
