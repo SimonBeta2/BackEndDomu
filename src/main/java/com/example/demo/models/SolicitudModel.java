@@ -33,22 +33,22 @@ public class SolicitudModel {
     @JoinColumn(name = "oferta_id", nullable = false)
     private OfertaModel oferta;
 
-    // Detalles adicionales que el cliente escribe (ej: "Se rompió un tubo en el baño")
-    @Column(nullable = false, length = 500)
+    // Detalles adicionales que el clientea escribe (ej: "Se rompió un tubo en el baño")
+    @Column(name = "descripcion_problema", nullable = false, length = 500)
     private String descripcionProblema;
     @CreationTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaSolicitud;
 
-    @Column(name = "direccion_id", nullable = true)
+    @Column(name = "direccion", nullable = true)
     private String direccion;
 
     // 2. Fecha preferida (Guarda YYYY-MM-DD)
-    @Column(nullable = false)
+    @Column(name = "fecha_preferida", nullable = false)
     private java.time.LocalDate fechaPreferida;
 
     // 3. Hora preferida (Guarda HH:mm:ss)
-    @Column(nullable = false)
+    @Column(name = "hora_preferida", nullable = false)
     private java.time.LocalTime horaPreferida;
 
     // --- GETTERS Y SETTERS ---
