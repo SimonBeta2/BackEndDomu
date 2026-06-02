@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.models.EstadoModel;
 import com.example.demo.models.OfertaModel;
 import com.example.demo.models.SolicitudModel;
 import com.example.demo.models.SolicitudUsuarioModel;
@@ -61,6 +62,9 @@ public class SolicitudService {
     solicitud.setOferta(ofertaReal);
     
     // El 'direccionId' ya se mapeará solo porque viene directo del JSON plano
+    EstadoModel estadoInicial = new EstadoModel();
+    estadoInicial.setId(1); 
+    solicitud.setEstado(estadoInicial);
 
     SolicitudModel solicitudGuardada = solicitudRepository.save(solicitud);
 
