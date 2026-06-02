@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.models.OfertaModel;
 import com.example.demo.models.SolicitudModel;
+import com.example.demo.models.SolicitudUsuarioModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.OfertaRepository;
 import com.example.demo.repositories.SolicitudRepository;
+import com.example.demo.repositories.SolicitudUsuarioRepository;
 import com.example.demo.repositories.UsuarioRepository;
 
 @Service
@@ -24,6 +26,9 @@ public class SolicitudService {
     @Autowired
     private OfertaRepository ofertaRepository; // O como se llame tu repositorio de ofertas
 
+    @Autowired
+    private SolicitudUsuarioRepository solicitudUsuarioRepository;
+
     public SolicitudModel registrarSolicitud(SolicitudModel solicitud) {
     // Buscamos al cliente y la oferta como ya lo hacías con tus repositorios estables
     UsuarioModel clienteReal = usuarioRepository.findById(solicitud.getCliente().getId())
@@ -37,7 +42,21 @@ public class SolicitudService {
     
     // El 'direccionId' ya se mapeará solo porque viene directo del JSON plano
 
-    return solicitudRepository.save(solicitud);
+    SolicitudModel solicitudGuardada = solicitudRepository.save(solicitud);
+
+    // 🚀 2.5. ¡TRUCO AUTOMÁTICO!: Llenamos la tabla intermedia usando el cliente y la solicitud guardada
+    try {
+        SolicitudUsuarioModel relacion = new SolicitudUsuarioModel(solicitudGuardada, clienteReal);
+        solicitudUsuarioRepository.save(relacion);
+        System.out.println("🔗 Fila intermedia registrada en solicitud_usuario para el Cliente ID: " + clienteReal.getId());
+    } catch (Exception e) {
+        // El try-catch protege tu flujo principal. Si pasa algo con la tabla de adorno, 
+        // la solicitud se guarda igual y React no nota ningún error.
+        System.out.println("⚠️ Registro en solicitud_usuario omitido de forma segura: " + e.getMessage());
+    }
+
+    // 3. Retornamos la solicitud guardada
+    return solicitudGuardada;
 }
 
     public List<SolicitudModel> obtenerPorCliente(Integer clienteId) {
