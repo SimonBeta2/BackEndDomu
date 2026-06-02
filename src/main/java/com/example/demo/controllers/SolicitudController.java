@@ -31,13 +31,13 @@ public class SolicitudController {
 
     // GET: Listar solicitudes enviadas por un cliente específico (Pestaña Solicitudes del Front)
     @GetMapping("/cliente/{clienteId}")
-    public List<SolicitudModel> listarPorCliente(@PathVariable Long clienteId) {
+    public List<SolicitudModel> listarPorCliente(@PathVariable Integer clienteId) {
         return solicitudService.obtenerPorCliente(clienteId);
     }
 
     // GET: Listar solicitudes recibidas por un trabajador específico (Pestaña Recibidas del Front)
     @GetMapping("/trabajador/{trabajadorId}")
-    public List<SolicitudModel> listarPorTrabajador(@PathVariable Long trabajadorId) {
+    public List<SolicitudModel> listarPorTrabajador(@PathVariable Integer trabajadorId) {
         return solicitudService.obtenerPorTrabajador(trabajadorId);
     }
 
