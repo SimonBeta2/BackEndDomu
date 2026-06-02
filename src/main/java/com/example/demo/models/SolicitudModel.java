@@ -40,9 +40,8 @@ public class SolicitudModel {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaSolicitud;
 
-    @ManyToOne
-    @JoinColumn(name = "direccion_id", referencedColumnName = "id", nullable = false)
-    private DireccionModel direccion;
+    @Column(name = "direccion_id", nullable = true)
+    private Integer direccion;
 
     // 2. Fecha preferida (Guarda YYYY-MM-DD)
     @Column(nullable = false)
@@ -68,8 +67,8 @@ public class SolicitudModel {
     public LocalDateTime getFechaSolicitud() { return fechaSolicitud; }
     public void setFechaSolicitud(LocalDateTime fechaSolicitud) { this.fechaSolicitud = fechaSolicitud; }
 
-    public DireccionModel getDireccion() { return direccion; }
-    public void setDireccion(DireccionModel direccion) { this.direccion = direccion; }
+    public Integer getDireccion() { return direccion; }
+    public void setDireccion(Integer direccion) { this.direccion = direccion; }
 
     public java.time.LocalDate getFechaPreferida() { return fechaPreferida; }
     public void setFechaPreferida(java.time.LocalDate fechaPreferida) { this.fechaPreferida = fechaPreferida; }

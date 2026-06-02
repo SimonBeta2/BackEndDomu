@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.models.DireccionModel;
 import com.example.demo.models.OfertaModel;
 import com.example.demo.models.SolicitudModel;
 import com.example.demo.models.UsuarioModel;
@@ -26,29 +25,20 @@ public class SolicitudService {
     private OfertaRepository ofertaRepository; // O como se llame tu repositorio de ofertas
 
     public SolicitudModel registrarSolicitud(SolicitudModel solicitud) {
-        // 1. Buscamos al usuario completo en la Base de Datos
-        UsuarioModel clienteReal = usuarioRepository.findById(solicitud.getCliente().getId())
-            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+    // Buscamos al cliente y la oferta como ya lo hacías con tus repositorios estables
+    UsuarioModel clienteReal = usuarioRepository.findById(solicitud.getCliente().getId())
+        .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
         
-        // 2. Extraemos la dirección real buscando dentro de la lista que ya tiene el usuario
-        Integer direccionIdBuscado = solicitud.getDireccion().getId();
-        DireccionModel direccionReal = clienteReal.getDirecciones().stream()
-            .filter(d -> d.getId().equals(direccionIdBuscado))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("La dirección no pertenece a este cliente o no existe"));
+    OfertaModel ofertaReal = ofertaRepository.findById(solicitud.getOferta().getId())
+        .orElseThrow(() -> new RuntimeException("Oferta no encontrada"));
 
-        // 3. Buscamos la oferta real para que Hibernate no proteste
-        OfertaModel ofertaReal = ofertaRepository.findById(solicitud.getOferta().getId())
-            .orElseThrow(() -> new RuntimeException("Oferta no encontrada"));
+    solicitud.setCliente(clienteReal);
+    solicitud.setOferta(ofertaReal);
+    
+    // El 'direccionId' ya se mapeará solo porque viene directo del JSON plano
 
-        // 4. Vinculamos las entidades persistidas a la solicitud
-        solicitud.setCliente(clienteReal);
-        solicitud.setDireccion(direccionReal);
-        solicitud.setOferta(ofertaReal);
-
-        // 5. Guardamos en Railway de forma segura
-        return solicitudRepository.save(solicitud);
-    }
+    return solicitudRepository.save(solicitud);
+}
 
     public List<SolicitudModel> obtenerPorCliente(Long clienteId) {
         return solicitudRepository.findByClienteId(clienteId);
