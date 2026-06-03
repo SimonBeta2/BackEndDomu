@@ -10,6 +10,7 @@ import com.example.demo.models.OfertaModel;
 import com.example.demo.models.SolicitudModel;
 import com.example.demo.models.SolicitudUsuarioModel;
 import com.example.demo.models.UsuarioModel;
+import com.example.demo.repositories.EstadoRepository;
 import com.example.demo.repositories.OfertaRepository;
 import com.example.demo.repositories.SolicitudRepository;
 import com.example.demo.repositories.SolicitudUsuarioRepository;
@@ -29,6 +30,9 @@ public class SolicitudService {
 
     @Autowired
     private SolicitudUsuarioRepository solicitudUsuarioRepository;
+
+    @Autowired
+    private EstadoRepository estadoRepository;
 
     public SolicitudModel registrarSolicitud(SolicitudModel solicitud) {
 
@@ -90,5 +94,19 @@ public class SolicitudService {
     public List<SolicitudModel> obtenerPorTrabajador(Integer trabajadorId) {
         return solicitudRepository.findByOfertaUsuarioId(trabajadorId);
     }
+
+    public SolicitudModel actualizarEstado(Integer solicitudId, Integer nuevoEstadoId) {
+    // 1. Buscamos la solicitud real
+    SolicitudModel solicitud = solicitudRepository.findById(solicitudId)
+        .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+
+    // 2. Buscamos el estado dinámico que mandó el frontend
+    EstadoModel nuevoEstado = estadoRepository.findById(nuevoEstadoId)
+        .orElseThrow(() -> new RuntimeException("El estado con ID " + nuevoEstadoId + " no existe en la base de datos"));
+
+    // 3. Modificamos y guardamos en Postgres
+    solicitud.setEstado(nuevoEstado);
+    return solicitudRepository.save(solicitud);
+}
 
 }
