@@ -43,4 +43,11 @@ public class ResenaService {
     public List<ResenaModel> obtenerReseñasPorTrabajador(Integer trabajadorId) {
         return resenaRepository.findByTrabajadorIdOrderByFechaCreacionDesc(trabajadorId);
     }
+
+    // 🔍 Traer ABSOLUTAMENTE TODAS las reseñas de la plataforma (de la más reciente a la más antigua)
+    public List<ResenaModel> obtenerTodasLasResenas() {
+        return resenaRepository.findAll(); 
+    // Si prefieres que salgan ordenadas por fecha de creación de forma global, puedes usar:
+    // return resenaRepository.findAll(org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "fechaCreacion"));
+}
 }

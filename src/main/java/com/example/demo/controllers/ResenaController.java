@@ -45,4 +45,12 @@ public class ResenaController {
         List<ResenaModel> reseñas = resenaService.obtenerReseñasPorTrabajador(trabajadorId);
         return ResponseEntity.ok(reseñas);
     }
+
+    // 📥 GET: Obtener todas las reseñas globales del sistema
+// URL: GET https://backenddomu-production.up.railway.app/api/reseñas
+    @GetMapping
+    public ResponseEntity<List<ResenaModel>> listarTodasLasResenas() {
+        List<ResenaModel> todas = resenaService.obtenerTodasLasResenas();
+        return ResponseEntity.ok(todas);
+}   
 }
