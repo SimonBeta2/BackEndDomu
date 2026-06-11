@@ -76,7 +76,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/usuario/**").permitAll()
 
                 // Rutas públicas
-                .requestMatchers("/api/servicios/**", "/api/productos/**", "/api/ofertas/**", "/api/solicitudes/**", "/api/estados/**,/api/reseñas/**").permitAll()
+                .requestMatchers("/api/servicios/**", "/api/productos/**", "/api/ofertas/**", "/api/solicitudes/**", "/api/estados/**,/api/resenas/**").permitAll()
                 .requestMatchers("/oauth2/**", "/login/**", "/api/auth/**").permitAll()
                 
                 // Todo lo demás privado

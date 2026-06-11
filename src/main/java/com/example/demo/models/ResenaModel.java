@@ -20,8 +20,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "reseñas")
-public class ReseñaModel {
+@Table(name = "resenas")
+public class ResenaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,7 +56,7 @@ public class ReseñaModel {
     @JoinColumn(name = "trabajador_id", nullable = false)
     private UsuarioModel trabajador;
 
-    public ReseñaModel() {
+    public ResenaModel() {
     }
 
     // --- GETTERS Y SETTERS MANUALES SEGUROS ---
