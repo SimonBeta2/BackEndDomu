@@ -1,7 +1,10 @@
 package com.example.demo.models;
+
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,104 +27,57 @@ public class ReseñaModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // ⭐️ 1. ATRIBUTO ENTERO (1 a 5) con validaciones de Spring
     @NotNull(message = "La calificación es obligatoria")
-    @Min(value = 1, message = "La calificación mínima es 1")
-    @Max(value = 5, message = "La calificación máxima es 5")
-    @Column(name = "calificacion", nullable = false)
+    @Min(value = 1, message = "Mínimo 1 estrella")
+    @Max(value = 5, message = "Máximo 5 estrellas")
+    @Column(nullable = false)
     private Integer calificacion;
 
-    // 💬 2. ATRIBUTO COMENTARIOS
-    // Usamos columnDefinition = "TEXT" por si el cliente se extiende escribiendo
-    @Column(name = "comentario", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String comentario;
 
-    // 📅 Atributo extra muy útil para ordenar por las más recientes
     @CreationTimestamp
-    @Column(name = "fecha_creacion")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "fecha_creacion", updatable = false, nullable = false)
     private LocalDateTime fechaCreacion;
 
-    // 🔗 3. RELACIONES (Cruciales para tu BD en Railway)
-    
-    // Una reseña nace a partir de una solicitud de servicio finalizada
+    // Relación 1 a 1 con la solicitud (Cada solicitud se califica una sola vez)
     @OneToOne
     @JoinColumn(name = "solicitud_id", nullable = false, unique = true)
     private SolicitudModel solicitud;
 
-    // El cliente que escribe la reseña (opcional si ya puedes sacarlo desde la solicitud)
+    // Cliente que califica
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private UsuarioModel cliente;
 
-    // El trabajador que recibe la puntuación (útil para sacar su promedio de estrellas rápido)
+    // Trabajador que recibe la calificación
     @ManyToOne
     @JoinColumn(name = "trabajador_id", nullable = false)
     private UsuarioModel trabajador;
 
-    // --- CONSTRUCTORES ---
     public ReseñaModel() {
     }
 
-    // Bloque que se ejecuta automáticamente antes de insertar en la BD
-    @PrePersist
-    protected void onCreate() {
-        this.fechaCreacion = LocalDateTime.now();
-    }
+    // --- GETTERS Y SETTERS MANUALES SEGUROS ---
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    // --- GETTERS Y SETTERS ---
-    public Integer getId() {
-        return id;
-    }
+    public Integer getCalificacion() { return calificacion; }
+    public void setCalificacion(Integer calificacion) { this.calificacion = calificacion; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public String getComentario() { return comentario; }
+    public void setComentario(String comentario) { this.comentario = comentario; }
 
-    public Integer getCalificacion() {
-        return calificacion;
-    }
+    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
+    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
 
-    public void setCalificacion(Integer calificacion) {
-        this.calificacion = calificacion;
-    }
+    public SolicitudModel getSolicitud() { return solicitud; }
+    public void setSolicitud(SolicitudModel solicitud) { this.solicitud = solicitud; }
 
-    public String getComentario() {
-        return comentario;
-    }
+    public UsuarioModel getCliente() { return cliente; }
+    public void setCliente(UsuarioModel cliente) { this.cliente = cliente; }
 
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public SolicitudModel getSolicitud() {
-        return solicitud;
-    }
-
-    public void setSolicitud(SolicitudModel solicitud) {
-        this.solicitud = solicitud;
-    }
-
-    public UsuarioModel getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(UsuarioModel cliente) {
-        this.cliente = cliente;
-    }
-
-    public UsuarioModel getTrabajador() {
-        return trabajador;
-    }
-
-    public void setTrabajador(UsuarioModel trabajador) {
-        this.trabajador = trabajador;
-    }
+    public UsuarioModel getTrabajador() { return trabajador; }
+    public void setTrabajador(UsuarioModel trabajador) { this.trabajador = trabajador; }
 }

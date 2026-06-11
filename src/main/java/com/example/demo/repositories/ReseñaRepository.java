@@ -10,9 +10,9 @@ import com.example.demo.models.ReseñaModel;
 @Repository
 public interface ReseñaRepository extends JpaRepository<ReseñaModel, Integer> {
     
-    // 🔍 Busca todas las reseñas de un trabajador ordenadas por la más reciente
+    // Traer reseñas de un trabajador específico ordenadas de la más nueva a la más vieja
     List<ReseñaModel> findByTrabajadorIdOrderByFechaCreacionDesc(Integer trabajadorId);
     
-    // 🛡️ Verifica si una solicitud ya tiene una reseña creada
+    // Saber si una solicitud ya fue calificada
     boolean existsBySolicitudId(Integer solicitudId);
 }

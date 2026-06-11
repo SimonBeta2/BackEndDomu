@@ -6,14 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
 
-@Data
 @Entity
 @Table(name = "servicios")
 public class ServiciosModel {
 
-    @Column(nullable = false, unique = true,length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String nombre;
 
     @Id
@@ -24,11 +22,20 @@ public class ServiciosModel {
     public ServiciosModel() {
     }
 
-
     public ServiciosModel(String nombre) {
         this.nombre = nombre;
     }
 
+    // 🚨 LOS MÉTODOS QUE LE FALTABAN A MAVEN PARA EL ID:
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    // Métodos que ya tenías:
     public String getNombre() {
         return nombre;
     }
@@ -36,5 +43,4 @@ public class ServiciosModel {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
 }

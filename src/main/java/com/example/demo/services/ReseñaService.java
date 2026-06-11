@@ -1,6 +1,5 @@
 package com.example.demo.services;
 
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ import com.example.demo.repositories.SolicitudRepository;
 public class ReseñaService {
 
     private final ReseñaRepository reseñaRepository;
-    private final SolicitudRepository solicitudRepository; // Para validar la solicitud
+    private final SolicitudRepository solicitudRepository;
 
     public ReseñaService(ReseñaRepository reseñaRepository, SolicitudRepository solicitudRepository) {
         this.reseñaRepository = reseñaRepository;
@@ -26,20 +25,18 @@ public class ReseñaService {
     public ReseñaModel crearReseña(Integer solicitudId, ReseñaModel reseñaData) {
         // 1. Validar que la solicitud exista
         SolicitudModel solicitud = solicitudRepository.findById(solicitudId)
-            .orElseThrow(() -> new RuntimeException("La solicitud con ID " + solicitudId + " no existe."));
+            .orElseThrow(() -> new RuntimeException("La solicitud no existe."));
 
-        // 2. Validar que no tenga una reseña previa (Relación 1 a 1)
+        // 2. Validar que no haya sido calificada antes
         if (reseñaRepository.existsBySolicitudId(solicitudId)) {
-            throw new RuntimeException("Esta solicitud ya ha sido calificada.");
+            throw new RuntimeException("Esta solicitud ya cuenta con una reseña.");
         }
 
-        // 3. Extraer automáticamente las entidades amarradas desde la solicitud
-        // Asumiendo que tu SolicitudModel tiene métodos para obtener al cliente y la oferta/trabajador
+        // 3. Mapear de forma cruzada usando las propiedades exactas de tus modelos
         reseñaData.setSolicitud(solicitud);
-        reseñaData.setCliente(solicitud.getCliente()); 
-        reseñaData.setTrabajador(solicitud.getOferta().getUsuario()); // El dueño de la oferta es el trabajador
+        reseñaData.setCliente(solicitud.getCliente()); // getCliente() de tu SolicitudModel
+        reseñaData.setTrabajador(solicitud.getOferta().getUsuario()); // getUsuario() de tu OfertaModel
 
-        // 4. Guardar en Postgres
         return reseñaRepository.save(reseñaData);
     }
 

@@ -18,7 +18,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/reseñas")
-@CrossOrigin(origins = "https://domu-services.vercel.app") // Tu Front en Vercel
+@CrossOrigin(origins = "https://domu-services.vercel.app")
 public class ReseñaController {
 
     private final ReseñaService reseñaService;
@@ -27,10 +27,8 @@ public class ReseñaController {
         this.reseñaService = reseñaService;
     }
 
-    // 📤 POST: Crear una nueva reseña amarrada a una solicitud
-    // URL ejemplo: POST https://backenddomu.../api/reseñas/solicitud/25
     @PostMapping("/solicitud/{solicitudId}")
-    public ResponseEntity<?> dejasResena(
+    public ResponseEntity<?> guardarReseña(
             @PathVariable Integer solicitudId, 
             @Valid @RequestBody ReseñaModel reseña
     ) {
@@ -42,10 +40,8 @@ public class ReseñaController {
         }
     }
 
-    // 📥 GET: Obtener el historial de reseñas de un trabajador para su perfil
-    // URL ejemplo: GET https://backenddomu.../api/reseñas/trabajador/8
     @GetMapping("/trabajador/{trabajadorId}")
-    public ResponseEntity<List<ReseñaModel>> obtenerPerfilReseñas(@PathVariable Integer trabajadorId) {
+    public ResponseEntity<List<ReseñaModel>> obtenerReseñasTrabajador(@PathVariable Integer trabajadorId) {
         List<ReseñaModel> reseñas = reseñaService.obtenerReseñasPorTrabajador(trabajadorId);
         return ResponseEntity.ok(reseñas);
     }
